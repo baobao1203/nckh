@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="basketball_court">
+
+   <link name="court"> ('san thi dau ')
+    <visual>
+      <geometry>
+        <box size="15 8 0"/> </geometry>
+      <material name="court_color"/>
+      <color rgba="192 192 192 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="15 8 0"/>
+      </geometry>
+    </collision>
+   </link>
+
+
+
+
+
+
+   <link name="cot">
+    <pose>15 4 0 0 0 0</pose> 
+    <visual>
+      <geometry>
+        <cylinder length="2.43" radius="0.01"/>
+      <material name="court_color"/>
+        <color rgba="192 192 192 0 1"/>
+      </material>    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="2.43" radius="0.01"/>
+      </geometry>
+    </collision>
+  </link> 
+
+
+</robot>
