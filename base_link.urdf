@@ -18,11 +18,11 @@
     </collision>
 
     <inertial>
-      <mass value="25"/>
+      <mass value="5"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <inertia 
-        ixx="0.333" ixy="0.0" ixz="0.0" 
-        iyy="0.333" iyz="0.0" izz="0.666"/>
+        ixx="0.07083" ixy="0.0" ixz="0.0" 
+        iyy="0.07083" iyz="0.0" izz="0."/>
     </inertial>
   </link>
 
