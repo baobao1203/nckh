@@ -1,0 +1,46 @@
+# Cấu hình cho các bộ điều khiển ros_control
+
+# Bộ điều khiển publish trạng thái các khớp (joint states)
+joint_state_controller:
+  type: joint_state_controller/JointStateController # Loại controller
+  publish_rate: 50                               # Tần số publish topic /joint_states (Hz)
+
+# Bộ điều khiển lái kiểu vi sai (diff drive) cho 4 bánh
+diff_drive_controller:
+  type: diff_drive_controller/DiffDriveController # Loại controller
+  
+  # Danh sách các khớp cho bánh trái và phải
+  left_wheel: ['joint_before_left', 'joint_after_left']
+  right_wheel: ['joint_before_right', 'joint_after_right']
+  
+  publish_rate: 50                      # Tần số publish odometry và TF (Hz)
+
+  # Cấu hình odometry và TF
+  pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03] # Ma trận hiệp phương sai cho pose
+  twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]# Ma trận hiệp phương sai cho twist
+  
+  cmd_vel_timeout: 0.25                 # Thời gian (giây) chờ lệnh /cmd_vel trước khi dừng robot
+
+  # --- QUAN TRỌNG: Publish TF từ odom -> base_link ---
+  enable_odom_tf: false                # Đặt là true để controller này publish TF odom -> base_link
+
+  cmd_vel: /cmd_vel # Chỉ định rõ ràng topic lắng nghe lệnh điều khiển
+
+
+  # Các tham số vật lý của bánh xe (phải khớp với URDF)
+  wheel_separation: 0.25                # Khoảng cách giữa tâm cụm bánh trái và phải (m) - Giá trị này cần xem lại dựa trên vị trí đặt bánh trong URDF
+  wheel_radius : 0.05                   # Bán kính bánh xe (m)
+
+  # (Tùy chọn) Giới hạn vận tốc và gia tốc
+  linear:
+    x:
+      has_velocity_limits    : true
+      max_velocity         : 2.0  # m/s
+      has_acceleration_limits: true
+      max_acceleration       : 1.5  # m/s^2
+  angular:
+    z:
+      has_velocity_limits    : true
+      max_velocity         : 3.0  # rad/s
+      has_acceleration_limits: true
+      max_acceleration       : 2.0  # rad/s^2

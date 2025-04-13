@@ -1,0 +1,48 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/empty.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/> <arg name="gui" value="true"/>
+    </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find my_robot)/baocao(1).urdf'"/>
+
+  <rosparam file="$(find my_robot)/launch/config/baocao_controllers.yaml" command="load"/>
+
+  <param name="court_description" textfile="$(find my_robot)/court.urdf"/>
+
+  <node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -model baocao_robot -param robot_description -x 0.0 -y 0.0 -z 0.6" respawn="false" output="screen" />
+
+  <node name="spawn_court" pkg="gazebo_ros" type="spawn_model" args="-urdf -model court_environment -param court_description -x 0 -y 0 -z 0"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/" 
+        args="joint_state_controller diff_drive_controller"/> 
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <param name="use_sim_time" value="true"/>
+      <rosparam param="robot_description"/> </node>
+
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <param name="base_frame" value="base_link"/>
+    <param name="odom_frame" value="odom"/> <param name="map_update_interval" value="0.5"/>
+    <param name="maxUrange" value="10.0"/>
+    <param name="minimumScore" value="5"/>
+    <param name="linearUpdate" value="0.02"/>
+    <param name="angularUpdate" value="0.02"/>
+    <param name="temporalUpdate" value="-1.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="particles" value="500"/>
+    <param name="srr" value="0.005"/>
+    <param name="srt" value="0.01"/>
+    <param name="str" value="0.005"/>
+    <param name="stt" value="0.01"/>
+    <param name="use_map_topic" value="true"/>
+    <param name="transform_publish_period" value="0.01"/>
+    <remap from="scan" to="/scan"/> </node>
+
+  <node name="lidar_reader" pkg="my_robot" type="lidar_reader.py" output="screen">
+    <param name="use_sim_time" value="true"/>
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_robot)/rviz/slam_config.rviz" required="false"/>
+  </launch>

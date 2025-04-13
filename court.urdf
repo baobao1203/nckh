@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<robot name="court_environment">
+  <!-- Định nghĩa link world -->
+  <link name="world"/>
+
+  <!-- Mặt sân -->
+  <link name="court">
+    <visual>
+      <geometry>
+        <box size="15 8 0.01"/>
+      </geometry>
+      <material name="court_color">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="15 8 0.01"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="100.0" ixy="0.0" ixz="0.0" iyy="100.0" iyz="0.0" izz="100.0"/>
+    </inertial>
+  </link>
+
+  <!-- Cột -->
+  <link name="cot">
+    <visual>
+      <geometry>
+        <cylinder length="2.43" radius="0.01"/>
+      </geometry>
+      <material name="court_color">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="2.43" radius="0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Tường trái -->
+  <link name="wall_left">
+    <visual>
+      <geometry>
+        <box size="0.1 8.0 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 8.0 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="10.0" ixy="0.0" ixz="0.0" iyy="10.0" iyz="0.0" izz="10.0"/>
+    </inertial>
+  </link>
+
+  <!-- Tường phải -->
+  <link name="wall_right">
+    <visual>
+      <geometry>
+        <box size="0.1 8.0 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 8.0 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="10.0" ixy="0.0" ixz="0.0" iyy="10.0" iyz="0.0" izz="10.0"/>
+    </inertial>
+  </link>
+
+  <!-- Tường trên -->
+  <link name="wall_top">
+    <visual>
+      <geometry>
+        <box size="15.0 0.1 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="15.0 0.1 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="10.0" ixy="0.0" ixz="0.0" iyy="10.0" iyz="0.0" izz="10.0"/>
+    </inertial>
+  </link>
+
+  <!-- Tường dưới -->
+  <link name="wall_bottom">
+    <visual>
+      <geometry>
+        <box size="15.0 0.1 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="15.0 0.1 1.0"/>
+      </geometry>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="10.0" ixy="0.0" ixz="0.0" iyy="10.0" iyz="0.0" izz="10.0"/>
+    </inertial>
+  </link>
+
+  <!-- Joint cố định -->
+  <joint name="court_joint" type="fixed">
+    <parent link="world"/>
+    <child link="court"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <joint name="cot_joint" type="fixed">
+    <parent link="court"/>
+    <child link="cot"/>
+    <origin xyz="7.5 0 1.215" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="wall_left_joint" type="fixed">
+    <parent link="court"/>
+    <child link="wall_left"/>
+    <origin xyz="-7.5 0 0"/>
+  </joint>
+
+  <joint name="wall_right_joint" type="fixed">
+    <parent link="court"/>
+    <child link="wall_right"/>
+    <origin xyz="7.5 0 0"/>
+  </joint>
+
+  <joint name="wall_top_joint" type="fixed">
+    <parent link="court"/>
+    <child link="wall_top"/>
+    <origin xyz="0 4.0 0"/>
+  </joint>
+
+  <joint name="wall_bottom_joint" type="fixed">
+    <parent link="court"/>
+    <child link="wall_bottom"/>
+    <origin xyz="0 -4.0 0"/>
+  </joint>
+</robot>
