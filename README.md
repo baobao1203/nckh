@@ -9,22 +9,45 @@
 
   <!-- Đẩy URDF lên parameter server -->
   <param name="robot_description" command="$(find xacro)/xacro $(find baocao)/src/baocao.urdf"/>
-
-  <!-- Spawn robot trong Gazebo -->
-  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
-  <node name="lidar_tf" pkg="tf" type="static_transform_publisher" 
-        args="0 0 0.15 0 0 0 base_link lidar_link 100" />
+  <node name="lidar_tf" pkg="tf" type="static_transform_publisher"  args="0 0 0.15 0 0 0 base_link lidar_link 100" />
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" 
         args="-urdf -model robot -param robot_description" output="screen"/>
 
-  <!-- Khởi động SLAM Toolbox -->
-<node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen">
-    <param name="odom_frame" value="odom"/>
-    <param name="map_frame" value="map"/>
+  <!-- Chạy node gmapping -->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
     <param name="base_frame" value="base_link"/>
-    <param name="laser_frame" value="lidar_link"/>
-    <remap from="/scan" to="/scan"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="5.0"/>
+    <param name="maxUrange" value="16.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="1.0"/>
+    <param name="angularUpdate" value="0.5"/>
+    <param name="temporalUpdate" value="-1.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="100"/>
+    <param name="xmin" value="-50.0"/>
+    <param name="ymin" value="-50.0"/>
+    <param name="xmax" value="50.0"/>
+    <param name="ymax" value="50.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
   </node>
+
+  <!-- Chạy rviz để trực quan hóa -->
 
   <!-- Khởi động RViz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baocao)/src/rviz/slam.rviz" output="screen"/>
